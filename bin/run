@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cat ./app/app.js ./app/models/*.js ./app/views/*.js ./app/routers/*.js > ./public/bb-client.js
+npm start

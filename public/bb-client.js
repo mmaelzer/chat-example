@@ -1,19 +1,29 @@
-var App = {};
-
-App.Views = {};
-App.Models = {};
-App.Routers = {};
+var App = {
+    Views: {},
+    Models: {},
+    Routers: {}
+};
 
 var ENTER_KEY_PRESS = 13;
 
-/*
-Views
- */
-
-App.Views.ChatApp = Backbone.View.extend({
+$(document).ready(function() {
+    var router = new App.Routers.ChatRouter();
+    Backbone.history.start();
+});App.Models.User =  Backbone.Model.extend({
+    defaults: {
+        "name": "anonymous",
+        "message": "",
+        "created": false
+    },
+    initialize: function() {
+        this.on('change:name', function() {
+            this.set("created", true);
+        });
+    }
+});App.Views.ChatApp = Backbone.View.extend({
     id: "chat-app",
     tagName: "div",
-    initialize: function() {
+    initialize: function(user) {
         _(this).bindAll("joinChat", "sendMessage", "userJoined", "userLeft", "messageReceived");
 
         this.user = new App.Models.User();
@@ -25,6 +35,8 @@ App.Views.ChatApp = Backbone.View.extend({
 
         this.user.on("change:name", this.joinChat);
         this.user.on("change:message", this.sendMessage);
+
+        if (user != "") this.user.set("name", user);
     },
     render: function() {
         $(this.el).html("<div id='header'>Chat</div>");
@@ -32,7 +44,11 @@ App.Views.ChatApp = Backbone.View.extend({
         $(this.el).append(this.chatWindow.render().el);
         $(this.el).append(this.messageBar.render().el);
 
-        this.messageBar.$el.hide();
+        if (this.user.get("created")) {
+            this.createUser.$el.hide();
+        } else {
+            this.messageBar.$el.hide();
+        }
 
         return this;
     },
@@ -68,30 +84,7 @@ App.Views.ChatApp = Backbone.View.extend({
     userJoined: function(message) {
         this.chatWindow.statusMessage(message.username, "joined the chat");
     }
-});
-
-App.Views.CreateUser = Backbone.View.extend({
-    id: "create-user",
-    tagName: "div",
-    events: {
-      "keyup .bubble" : "setName"
-    },
-    initialize: function(user) {
-        this.user = user;
-        _(this).bindAll("setName");
-    },
-    render: function() {
-        $(this.el).append('<input id="username" class="bubble" placeholder="Enter username to join chat">');
-        return this;
-    },
-    setName: function(e) {
-        if (e.keyCode === ENTER_KEY_PRESS) {
-            this.user.set("name", this.$('#username').val())
-        }
-    }
-});
-
-App.Views.ChatWindow = Backbone.View.extend({
+});App.Views.ChatWindow = Backbone.View.extend({
     id: "message-list",
     tagName: "div",
     className: "bubble",
@@ -108,13 +101,30 @@ App.Views.ChatWindow = Backbone.View.extend({
         $(this.el).append('<div>' + message + '</div>');
         $(this.el).scrollTop($(this.el).scrollHeight);
     }
-});
-
-App.Views.MessageBar = Backbone.View.extend({
+});App.Views.CreateUser = Backbone.View.extend({
+    id: "create-user",
+    tagName: "div",
+    events: {
+        "keyup .bubble" : "setName"
+    },
+    initialize: function(user) {
+        this.user = user;
+        _(this).bindAll("setName");
+    },
+    render: function() {
+        $(this.el).append('<input id="username" class="bubble" placeholder="Enter username to join chat">');
+        return this;
+    },
+    setName: function(e) {
+        if (e.keyCode === ENTER_KEY_PRESS) {
+            this.user.set("name", this.$('#username').val())
+        }
+    }
+});App.Views.MessageBar = Backbone.View.extend({
     id: "messagebar",
     tagName: "div",
     events: {
-      "keyup .bubble" : "enterMessage"
+        "keyup .bubble" : "enterMessage"
     },
     initialize: function(user) {
         _(this).bindAll('enterMessage');
@@ -131,38 +141,23 @@ App.Views.MessageBar = Backbone.View.extend({
         }
     }
 });
-
-/*
-Models
- */
-
-App.Models.User =  Backbone.Model.extend({
-    defaults: {
-        "name": "anonymous",
-        "message": ""
-    },
-    initialize: function(name) {
-        if (name) {
-            this.set("name", name);
-        }
-    }
-});
-
-/*
-Routers
- */
-
 App.Routers.ChatRouter = Backbone.Router.extend({
     routes: {
+        ":user": "chatWithUser",
         "*other": "defaultRoute"
     },
     defaultRoute: function() {
-        this.chatApp = new App.Views.ChatApp();
+        this.createChatWithUser("");
+    },
+    chatWithUser: function(user) {
+        this.createChatWithUser(user);
+    },
+    createChatWithUser: function(user) {
+        if (this.chatApp) {
+            this.chatApp.remove();
+        }
+        this.chatApp = new App.Views.ChatApp(user);
         $('body').append(this.chatApp.render().el);
     }
 });
 
-$(document).ready(function() {
-    var router = new App.Routers.ChatRouter();
-    Backbone.history.start();
-});
