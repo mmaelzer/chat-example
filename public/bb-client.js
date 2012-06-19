@@ -66,11 +66,12 @@ $(document).ready(function() {
         this.chatWindow.chatMessage(message.username, message.message);
     },
     sendMessage: function() {
-        this.socket.emit('message',
-            {
-                username: this.user.get("name"),
-                message: this.user.get("message")
-            });
+        var newMessage = {
+            username: this.user.get("name"),
+            message: this.user.get("message")
+        }
+        this.socket.emit('message', newMessage);
+        this.messageReceived(newMessage);
     },
     setupSocketIo: function() {
         this.socket = io.connect();
@@ -98,7 +99,7 @@ $(document).ready(function() {
         this.message(username + ': ' + message)
     },
     message: function(message) {
-        $(this.el).append('<div>' + message + '</div>');
+        $(this.el).append(_.template($('#chat-msg-tmpl8').html(), { message: message }));
         $(this.el).scrollTop($(this.el).scrollHeight);
     }
 });App.Views.CreateUser = Backbone.View.extend({
@@ -112,7 +113,8 @@ $(document).ready(function() {
         _(this).bindAll("setName");
     },
     render: function() {
-        $(this.el).append('<input id="username" class="bubble" placeholder="Enter username to join chat">');
+        var compiledTemplate = _.template($('#input-bubble-tmpl8').html(), { id: "username", message: "Enter username to join chat" });
+        $(this.el).append(compiledTemplate);
         return this;
     },
     setName: function(e) {
@@ -131,7 +133,8 @@ $(document).ready(function() {
         this.user = user;
     },
     render: function() {
-        $(this.el).append('<input id="new-message" class="bubble" placeholder="Enter message to send" >');
+        var compiledTemplate = _.template($('#input-bubble-tmpl8').html(), { id: "new-message", message: "Enter message to send" });
+        $(this.el).append(compiledTemplate);
         return this;
     },
     enterMessage: function(e) {

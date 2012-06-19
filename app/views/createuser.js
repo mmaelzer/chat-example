@@ -9,7 +9,8 @@ App.Views.CreateUser = Backbone.View.extend({
         _(this).bindAll("setName");
     },
     render: function() {
-        $(this.el).append('<input id="username" class="bubble" placeholder="Enter username to join chat">');
+        var compiledTemplate = _.template($('#input-bubble-tmpl8').html(), { id: "username", message: "Enter username to join chat" });
+        $(this.el).append(compiledTemplate);
         return this;
     },
     setName: function(e) {

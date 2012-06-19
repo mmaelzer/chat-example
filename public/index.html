@@ -4,8 +4,6 @@
   <meta charset="utf-8">
   <link href="./chat.css" rel="stylesheet" type="text/css">
   <title>Chat Example</title>
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./underscore.js"></script>
@@ -26,3 +24,8 @@
 </body>
 </html>
 
+<script id="chat-msg-tmpl8" type="text/html" src="chat-message.tmpl8">
+    <div><%= message %></div>
+</script><script id="input-bubble-tmpl8" type="text/html" src="input-bubble.tmpl8">
+    <input id="<%= id %>" class="bubble" placeholder="<%= message %>" >
+</script>

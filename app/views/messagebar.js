@@ -9,7 +9,8 @@ App.Views.MessageBar = Backbone.View.extend({
         this.user = user;
     },
     render: function() {
-        $(this.el).append('<input id="new-message" class="bubble" placeholder="Enter message to send" >');
+        var compiledTemplate = _.template($('#input-bubble-tmpl8').html(), { id: "new-message", message: "Enter message to send" });
+        $(this.el).append(compiledTemplate);
         return this;
     },
     enterMessage: function(e) {

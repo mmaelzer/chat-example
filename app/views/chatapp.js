@@ -44,11 +44,12 @@ App.Views.ChatApp = Backbone.View.extend({
         this.chatWindow.chatMessage(message.username, message.message);
     },
     sendMessage: function() {
-        this.socket.emit('message',
-            {
-                username: this.user.get("name"),
-                message: this.user.get("message")
-            });
+        var newMessage = {
+            username: this.user.get("name"),
+            message: this.user.get("message")
+        }
+        this.socket.emit('message', newMessage);
+        this.messageReceived(newMessage);
     },
     setupSocketIo: function() {
         this.socket = io.connect();

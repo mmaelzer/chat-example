@@ -1,0 +1,3 @@
+<script id="input-bubble-tmpl8" type="text/html" src="input-bubble.tmpl8">
+    <input id="<%= id %>" class="bubble" placeholder="<%= message %>" >
+</script>

@@ -1,0 +1,3 @@
+<script id="chat-msg-tmpl8" type="text/html" src="chat-message.tmpl8">
+    <div><%= message %></div>
+</script>
