@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat ./app/app.js ./app/models/*.js ./app/views/*.js ./app/routers/*.js > ./public/bb-client.js
+cat ./app/app.js ./app/models/*.js ./app/views/*.js ./app/routers/*.js > ./public/client.js
 cat ./app/templates/*.tmpl8 >> ./public/index.html
 npm start
 

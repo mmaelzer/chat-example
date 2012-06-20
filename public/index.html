@@ -8,7 +8,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="./underscore.js"></script>
     <script src="./backbone.js"></script>
-    <script src="./bb-client.js"></script>
+    <script src="./client.js"></script>
 </head>
 <body>
 <!--
@@ -25,6 +25,10 @@
 </html>
 
 <script id="chat-msg-tmpl8" type="text/html" src="chat-message.tmpl8">
+    <div><%= message %></div>
+</script><script id="input-bubble-tmpl8" type="text/html" src="input-bubble.tmpl8">
+    <input id="<%= id %>" class="bubble" placeholder="<%= message %>" >
+</script><script id="chat-msg-tmpl8" type="text/html" src="chat-message.tmpl8">
     <div><%= message %></div>
 </script><script id="input-bubble-tmpl8" type="text/html" src="input-bubble.tmpl8">
     <input id="<%= id %>" class="bubble" placeholder="<%= message %>" >
