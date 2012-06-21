@@ -17,7 +17,7 @@ App.Views.ChatApp = Backbone.View.extend({
         if (user != "") this.user.set("name", user);
     },
     render: function() {
-        $(this.el).html("<div id='header'>Chat</div>");
+        $(this.el).append("<div id='header'>Chat</div>");
         $(this.el).append(this.createUser.render().el);
         $(this.el).append(this.chatWindow.render().el);
         $(this.el).append(this.messageBar.render().el);
